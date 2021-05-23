@@ -2,7 +2,7 @@
 #include <algorithm>
 
 using namespace std;
-
+//comment
 string getText();
 string getKey();
 string formatText(string, int);
