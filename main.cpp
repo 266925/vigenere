@@ -1,6 +1,6 @@
 #include <iostream>
-
 #include <algorithm>
+#include <string>
 
 using namespace std;
 
@@ -11,52 +11,57 @@ string formatKey(string, string, int);
 int getColumns();
 int getTransform();
 void fillSmall(char[][26]);
-void fillLarge(char[][95]);
-void transformSmall(string, string, string, int, char[][26]);
-void transformLarge(string, string, string, int, char[][95]);
+void fillLarge(char[][93]);
+void transformSmall(string, string, int, char[][26]);
+void transformLarge(string, string, int, char[][93]);
+void outputResults(string, string, string, string);
 
-int main() {
+int main(){
+  //Local variables to hold user information and menu choices
+  int transformChoice, matrixSize, runAgain;
+  string formattedText, formattedKey, originalText, originalKey;
+  
+  //Declare small and large arrays to represent a Vigenere Table
+  char vSmall[26][26]; 
+  char vLarge[93][93];
 
-  int transformChoice, matrixSize, runAgain; // User variables
-  string userText, userKey, originalKey;
-
-  char vSmall[26][26]; // Declare matrices
-  char vLarge[95][95];
-
-  fillSmall(vSmall); //Fill matrices
+  //Fill the large and small arrays with values
+  fillSmall(vSmall); 
   fillLarge(vLarge);
 
-  do { //Main Menu
+  do { 
 
-    // Get user information
-    transformChoice = getTransform();
-    userText = getText();
-    userKey = getKey();
+    //Get user information
     matrixSize = getColumns();
+    transformChoice = getTransform();
+    originalText = getText();
+    originalKey = getKey();
 
-    // Format accordingly
-    originalKey = userKey;
-    userText = formatText(userText, matrixSize);
-    userKey = formatKey(userKey, userText, matrixSize);
+    //Store the formatted text and key in new variables 
+    formattedText = formatText(originalText, matrixSize);
+    formattedKey = formatKey(originalKey, formattedText, matrixSize);
 
-    if (matrixSize == 26) { // Transform text according to user selection and matrix size
-      transformSmall(userText, userKey, originalKey, transformChoice, vSmall);
-    } else if (matrixSize == 95) {
-      transformLarge(userText, userKey, originalKey, transformChoice, vLarge);
+    //Output user input before and after formatting
+    outputResults(originalText, originalKey, formattedText, formattedKey);
+
+    //Transform the text according to the user's Vigenere selection
+    if (matrixSize == 26) { 
+      transformSmall(formattedText, formattedKey, transformChoice, vSmall);
+    } else if (matrixSize == 93) {
+      transformLarge(formattedText, formattedKey, transformChoice, vLarge);
     }
 
-    cout << "\nRun again? "; // Prompt user to run again
+    //Prompt user to run the program again
+    std::cout << "\nRun again?\n1. Yes\n2. No\n"; 
     cin >> runAgain;
-
-  } while (runAgain != 0);
+  } while (runAgain != 2);
 
 }
 
-string getText() //Get user text
-{
+string getText(){
   string text;
   cin.ignore();
-  cout << "\nInput TEXT: ";
+  cout << "\nInput your TEXT: ";
   getline(cin, text);
   if (text.length() < 1) {
     cout << "\nINVALID INPUT\n";
@@ -65,10 +70,9 @@ string getText() //Get user text
   return text;
 }
 
-string getKey() //Get the user key 
-{
+string getKey(){
   string key;
-  cout << "Input KEY : ";
+  cout << "Input your KEY : ";
   getline(cin, key);
   if (key.length() < 1) {
     cout << "\nINVALID INPUT\n";
@@ -77,26 +81,24 @@ string getKey() //Get the user key
   return key;
 }
 
-int getColumns() //Get matrix size
-{
+int getColumns(){
   int columns;
-  cout << "\n1. Small Vigenere (26x26)\n" <<
-    "2. Large Vigenere (95x95)\n";
+  cout << "\nInput Selection Number\n1. Small Vigenere (26x26)\n" <<
+    "2. Large Vigenere (93x93)\n";
   cin >> columns;
   if (columns == 1) {
     return 26;
   } else if (columns == 2) {
-    return 95;
+    return 93;
   } else {
     cout << "\nINVALID INPUT\n";
     exit(1);
   }
 }
 
-int getTransform() //Get the transform choice
-{
+int getTransform(){
   int choice;
-  cout << "\nInput Choice Number\n1. Encryption\n2. Decryption\n";
+  cout << "\nInput Selection Number\n1. Encryption\n2. Decryption\n";
   cin >> choice;
   if (choice != 1 && choice != 2) {
     cout << "\nINVALID INPUT\n";
@@ -107,16 +109,32 @@ int getTransform() //Get the transform choice
 
 string formatText(string text, int size) {
   /* 
-    If the user is using the small matrix, we will force the text to UPPERCASE
-    and remove characters outside that range. We will do the same for the 
-    expanded range of the larger matrix. A check at the end of the function 
-    checks to make sure the text is not empty. 
+    Function removes spaces from the text.
+
+    If the user is using the 26x26 Vigenere Table,
+    remove any characters outside the accepted
+    ASCII range.
+    
+    If the user is using the 93x93 Vigenere Table,
+    preserve case but also continue to remove any
+    characters outside the accepted ASCII range.
+
+    If any invalid characters are found, the user
+    is notified and each removed character is 
+    outputted to the terminal. 
   */
 
+  //Remove Spaces from TEXT
+  cout << "\nRemoving spaces from the TEXT...";
+  text.erase(std::remove_if(text.begin(), text.end(), ::isspace), text.end());
+
   if (size == 26) {
-    cout << "\nForcing uppercase letters in the TEXT..";
+    //Force UPPERCASE
+    cout << "\nForcing uppercase letters in the TEXT...";
     transform(text.begin(), text.end(), text.begin(), ::toupper);
+
     for (int i = 0; i < text.size(); i++) {
+      //Remove characters outside ASCII range
       if (text[i] < (char) 65 || text[i] > (char) 90) {
         cout << "\nInvalid character found in TEXT! Removing [" << text[i] << "]...";
         text.erase(i, 1);
@@ -124,16 +142,19 @@ string formatText(string text, int size) {
       }
     }
 
-  } else if (size == 95) {
+  } else if (size == 93) {
     for (int i = 0; i < text.size(); i++) {
-      if ((text[i] < (char) 32 || text[i] > (char) 127)) {
+      //Remove characters outside ASCII range
+      if ((text[i] < (char) 33 || text[i] > (char) 126)) {
         cout << "\nInvalid character found in TEXT! Removing [" << text[i] << "]...";
         text.erase(i, 1);
         i--;
       }
+      
     }
-
+      
   }
+  //If the user entered invalid characters exclusivley
   if (text.length() < 1) {
     cout << "\nText is NULL after format. Please enter at least 1 VALID character.";
     exit(1);
@@ -143,21 +164,26 @@ string formatText(string text, int size) {
 
 string formatKey(string key, string text, int tableSize) 
 {
-  /* If the user is using the small matrix, the key is forced to UPPERCASE
-    and any characters outside that range are removed. If the user is using
-    the large matrix, case is preserved but characters outside the range of 
-    (33-127) are removed. Then the key is resized to be of equal length to 
-    the user text.
+  /* 
+    Function behaves identically to formatText function.
+
+    Additionally, if the key is too long, it is trimmed 
+    until of equal length to the user inputted text.
   */
 
   int textSize = text.size();
 
-  if (tableSize == 26) {
+  //Remove Spaces from KEY
+  cout << "\nRemoving spaces from the KEY...";
+  key.erase(std::remove_if(key.begin(), key.end(), ::isspace), key.end());
 
-    cout << "\nForcing uppercase letters in the KEY..";
+  if (tableSize == 26) {
+    //Force UPPERCASE
+    cout << "\nForcing uppercase letters in the KEY...";
     transform(key.begin(), key.end(), key.begin(), ::toupper);
 
     for (int i = 0; i < key.size(); i++) {
+      //Remove invalid characters
       if (key[i] < (char) 65 || key[i] > (char) 90) {
         cout << "\nInvalid character found in KEY! Removing [" << key[i] << "]...";
         key.erase(i, 1);
@@ -166,22 +192,28 @@ string formatKey(string key, string text, int tableSize)
     }
     cout << endl;
     if (key.length() < 1) {
+      //If the user entered invalid characters exclusivley
       cout << "\nKey is NULL after format. Please enter at least 1 VALID character.\n";
       exit(1);
     }
   }
 
-  string newKey = key; //Copy the original key
+  //Copy the original key for comparisons
+  string newKey = key; 
 
-  if (newKey.size() < textSize) { //Resize Case 1: too small
-    
+  //If the key is not long enough
+  if (newKey.size() < textSize) { 
     for (int newKeyIndex = key.size(), oldKeyIndex = 0; newKeyIndex < textSize; newKeyIndex++, oldKeyIndex++) {
-      newKey += newKey[oldKeyIndex % key.size()]; //Append the key to itself
+      //Append the key to itself
+      newKey += newKey[oldKeyIndex % key.size()];
     }
-  } else if (newKey.size() > textSize) { //Resize Case 2: too large
-    cout << "\nKey is too long. Trimming the key...\n";
+    //If the key is too long
+  } else if (newKey.size() > textSize) {
+    cout << "\nKey is too long. Trimming the key...";
+    //Trim the key's length
     newKey.resize(textSize);
-  } else { //Resize Case 3: just right
+  }//If the key does NOT need to be resized 
+  else{ 
     return newKey;
   }
   return newKey;
@@ -194,6 +226,7 @@ void fillSmall(char vSmall[][26]) {
     exclusivley. Remove comment tags at the end of the function to
     display the table as it is filled. 
   */
+
   for (int row = 0; row < 26; row++) {
     for (int col = 0; col < 26; col++) {
       vSmall[row][col] = 65 + (row + col) % 26;
@@ -203,18 +236,18 @@ void fillSmall(char vSmall[][26]) {
 
 }
 
-void fillLarge(char vLarge[][95]){
+void fillLarge(char vLarge[][93]){
 
   /* 
-    Fills the large Vigenere table (95x95) with appropiate values
-    from the set of useable characters. All cases, numbeers and 
+    Fills the large Vigenere table (93x93) with appropiate values
+    from the set of useable characters. Both cases, numbers and 
     most symbols are used. Remove comment tags at the end of the 
     function to display the table as it is filled. 
   */
 
-  for (int row = 0; row < 95; row++) {
-    for (int col = 0; col < 95; col++) {
-      vLarge[row][col] = 32 + (row + col) % 95;
+  for (int row = 0; row < 93; row++) {
+    for (int col = 0; col < 93; col++) {
+      vLarge[row][col] = 33 + (row + col) % 93;
       //cout << vLarge[row][col] << " ";
     }
     //cout << endl;
@@ -222,20 +255,32 @@ void fillLarge(char vLarge[][95]){
 
 }
 
-void transformSmall(string text, string key, string org, int choice, char vSmall[][26]){
+void outputResults(string orgT, string orgK, string textF, string keyF){
+
+//Outputs the original text and key, then the formatted text and key.
+cout << "\n\nOriginal Text : " << orgT <<
+        "\nOriginal Key  : " << orgK << 
+        "\n\nFormatted Text: " << textF <<
+        "\nFormatted Key : " << keyF << 
+        endl;
+
+}
+
+void transformSmall(string text, string key, int choice, char vSmall[][26]){
 
   /*
     This function utilizes the smaller Vigenere 2D array to encrypt or decrypt the user text.
     
     For ENCRYPTION, Variables to hold the transformed text are declared and the ASCII starting index 
     (65 or 'A') is set. When the lookup is performed, the row index is represented by the 
-    first characters ASCII code in the working set 
-    of uppercase letters subtracted from the ASCII code of the current character in the users
-    text. The columns are represented indentically but using the key instead of the text. The
-    character in the 2D Vigenere array at those indices is the appended to the encrypted text
-    varaible.  
+    first characters ASCII code in the working set of uppercase letters subtracted from the 
+    ASCII code of the current character in the users text. The columns are represented 
+    indentically but using the key instead of the text. The character in the 2D Vigenere 
+    array at those indices is then appended to the encrypted text varaible.  
 
-    For DECRYPTION, 
+    For DECRYPTION, a lookup is performed on the generated Vigenere Table to determine the 
+    decryptedcharactyer.
+
   */
 
   string encryptedText, decryptedText;
@@ -246,11 +291,9 @@ void transformSmall(string text, string key, string org, int choice, char vSmall
     for (int i = 0; i < text.size(); i++) {
       encryptedText += vSmall[text[i] - (char) ASCII_INDEX][key[i] - (char) ASCII_INDEX];
     }
+    
+    cout << "\nEncrypted Text: " << encryptedText << endl;
 
-    cout << "\nOriginal_Text:   " << text;
-    cout << "\nEncrypted_Text:  " << encryptedText;
-    cout << "\nFormatted_Key:   " << key;
-    cout << "\nOriginal_Key:    " << org << endl;
 
   } else if (choice == 2) {
 
@@ -266,50 +309,43 @@ void transformSmall(string text, string key, string org, int choice, char vSmall
         }
       }
     }
-
-    cout << "\nOriginal_Text:   " << text;
-    cout << "\nDecrypted_Text:  " << decryptedText << endl;
-    cout << "\nFormatted_Key:   " << key;
-    cout << "\nOriginal_Key:    " << org << endl;
+    cout << "\nDecrypted Text: " << decryptedText << endl;
   } else {
     exit(1);
   }
 
 }
 
-void transformLarge(string text, string key, string org, int choice, char vLarge[][95]) //Tranform (95x95)
-{
+void transformLarge(string text, string key, int choice, char vLarge[][93]){
+
+  /*
+    Function behaves identically to the transformSmall function, just with 
+    expanded ranges for valid character ASCII codes. (Decimal 33-126)
+  */
 
   string encryptedText, decryptedText;
-  int ASCII_INDEX = 32;
+  int ASCII_INDEX = 33;
 
   if (choice == 1) {
 
     for (int i = 0; i < text.size(); i++) {
       encryptedText += vLarge[text[i] - (char) ASCII_INDEX][key[i] - (char) ASCII_INDEX];
     }
-
-    cout << "\nOriginal_Text:   " << text;
-    cout << "\nEncrypted_Text:  " << encryptedText;
-    cout << "\nFormatted_Key:   " << key;
-    cout << "\nOriginal_Key:    " << org << endl;
+    cout << "Encrypted Text: " << encryptedText << endl;
 
   } else if (choice == 2) {
 
     for (int i = 0; i < text.size(); i++) {
-      for (int j = 0; j < 95; j++) {
+      for (int j = 0; j < 93; j++) {
         if (vLarge[j][key[i] - (char) ASCII_INDEX] == text[i]) {
           decryptedText += (char) ASCII_INDEX + j;
         }
       }
     }
-
-    cout << "\nOriginal_Text:   " << text;
-    cout << "\nDecrypted_Text:  " << decryptedText << endl;
-    cout << "\nFormatted_Key:   " << key;
-    cout << "\nOriginal_Key:    " << org << endl;
+    cout << "Decrypted Text: " << decryptedText << endl;
   } else {
     exit(1);
   }
 
 }
+
