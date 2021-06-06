@@ -1,4 +1,23 @@
 # vigenere
+
+What problems are you solving in this project?
+
+
+What solutions are you implementing in the project?
+
+Provide explanation of calculations and algorithm implementation.
+
+What is the program objectives? Explain how your program is interacting with the user
+and its purpose.
+
+How is discrete structures implemented in the C++ program?
+
+What are the limitations of the program?
+
+Provide recommendation on improving the limitations of the program
+
+
+
 The Vigenere receives user text and a user-specified key which is used to encrypt or decrypt the text according to the set of symbols chosen by the user. The first set of symbols are the UPPERCASE letters from A-Z. (26 characters). The second set of symbols are the printable ASCII characters from 3310 to 12610. (93 Symbols). After the user inputs their selection for Encryption/Decryption, the program then prompts the user for the size of the Vigenere Table used to encrypt the text. (26x26 or 93x93). The user is then prompted for the text to be transformed and the key to be used. The program then computes the result and prompts the user to run again. 
 	
 Some of the problems I encountered were errors due to improper formatting of the text and key, invalid input when presented with menu choices and the implementation of an array whose size is not known at compile time. If the user wants to use the first set of symbols for encryption, (26x26) the only valid characters for the text and key are exclusively UPPERCASE letters. The ASCII range of these values are 6510 to 9010. The valid range of ASCII values for the larger Vigenere Table are 3310 to 12610. To resolve errors from having invalid characters in the text and key, spaces from both strings are removed, then the text and key are converted to UPPERCASE if the user is using the 26x26 Vigenere Table. The previous step is not necessary for the larger Vigenere Table because LOWERCASE and UPPERCASE characters, symbols and numbers are valid inputs. Then, both strings are checked for any characters outside the accepted range of ASCII values. If any are found, the user is notified and the characters are removed. In the event that the user only inputted invalid characters, a check is performed to make sure neither string is empty, which would cause errors if the program were to continue. A final check is performed on the user key’s length; If longer than the user text, it is trimmed. If shorter than the text, it is appended to itself until the length of the text and key are of equal length. The last problem I encountered was the declaration of an array to represent the Vigenere Table at compile time. I decided to declare 2 different Vigenere Tables and only fill the one used by the user with values. If I wanted to add functionality for the user to specify a specific Vigenere table size, I would approach the solution differently by using dynamic memory allocation. I decided to go with the former because only 2 differently sized arrays are used and the resource strain is relatively minimal. 
