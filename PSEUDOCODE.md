@@ -15,22 +15,25 @@ DECLARE variables
     formattedText
 
 DECLARE Vigenere tables
+    
     vSmall[26][26]
     vLarge[93][93]
 
 CALL FUNCTION fillSmall 
+    
     FOR EACH row
         FOR EACH column
             each element is equal to the sum of 65 and both iterators modded by 26
 
 CALL FUNCTION fillLarge 
+    
     FOR EACH row
         FOR EACH column
             each element is equal to the sum of 33 and both iterators modded by 26
 
 DO
 
-CALL FUNCTION getColumns
+    CALL FUNCTION getColumns
 
     DECLARE variables
     prompt user for Vigenere size
