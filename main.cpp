@@ -16,20 +16,20 @@ void transformSmall(string, string, int, char[][26]);
 void transformLarge(string, string, int, char[][93]);
 void outputResults(string, string, string, string);
 
-int main(){
+int main() {
   //Local variables
   int transformChoice, matrixSize, runAgain;
   string formattedText, formattedKey, originalText, originalKey;
-  
+
   //Declare sarrays
-  char vSmall[26][26]; 
+  char vSmall[26][26];
   char vLarge[93][93];
 
   //Fill arrays
-  fillSmall(vSmall); 
+  fillSmall(vSmall);
   fillLarge(vLarge);
 
-  do { 
+  do {
 
     //Get user information
     matrixSize = getColumns();
@@ -45,20 +45,20 @@ int main(){
     outputResults(originalText, originalKey, formattedText, formattedKey);
 
     //Transform
-    if (matrixSize == 26) { 
+    if (matrixSize == 26) {
       transformSmall(formattedText, formattedKey, transformChoice, vSmall);
     } else if (matrixSize == 93) {
       transformLarge(formattedText, formattedKey, transformChoice, vLarge);
     }
 
     //Prompt user to run  again
-    std::cout << "\nRun again?\n1. Yes\n2. No\n"; 
+    std::cout << "\nRun again?\n1. Yes\n2. No\n";
     cin >> runAgain;
   } while (runAgain != 2);
 
 }
 
-string getText(){
+string getText() {
   string text;
   cin.ignore();
   cout << "\nInput your TEXT: ";
@@ -70,7 +70,7 @@ string getText(){
   return text;
 }
 
-string getKey(){
+string getKey() {
   string key;
   cout << "Input your KEY : ";
   getline(cin, key);
@@ -81,7 +81,7 @@ string getKey(){
   return key;
 }
 
-int getColumns(){
+int getColumns() {
   int columns;
   cout << "\nInput Selection Number\n1. Small Vigenere (26x26)\n" <<
     "2. Large Vigenere (93x93)\n";
@@ -96,7 +96,7 @@ int getColumns(){
   }
 }
 
-int getTransform(){
+int getTransform() {
   int choice;
   cout << "\nInput Selection Number\n1. Encryption\n2. Decryption\n";
   cin >> choice;
@@ -135,9 +135,9 @@ string formatText(string text, int size) {
         text.erase(i, 1);
         i--;
       }
-      
+
     }
-      
+
   }
 
   if (text.length() < 1) {
@@ -147,8 +147,7 @@ string formatText(string text, int size) {
   return text;
 }
 
-string formatKey(string key, string text, int tableSize) 
-{
+string formatKey(string key, string text, int tableSize) {
 
   int textSize = text.size();
 
@@ -162,7 +161,7 @@ string formatKey(string key, string text, int tableSize)
     transform(key.begin(), key.end(), key.begin(), ::toupper);
 
     for (int i = 0; i < key.size(); i++) {
-            //Remove characters outside ASCII range (small)
+      //Remove characters outside ASCII range (small)
       if (key[i] < (char) 65 || key[i] > (char) 90) {
         cout << "\nInvalid character found in KEY! Removing [" << key[i] << "]...";
         key.erase(i, 1);
@@ -177,10 +176,10 @@ string formatKey(string key, string text, int tableSize)
   }
 
   //Copy key
-  string newKey = key; 
+  string newKey = key;
 
   //If the key is not long enough
-  if (newKey.size() < textSize) { 
+  if (newKey.size() < textSize) {
     for (int newKeyIndex = key.size(), oldKeyIndex = 0; newKeyIndex < textSize; newKeyIndex++, oldKeyIndex++) {
       //Append the key to itself
       newKey += newKey[oldKeyIndex % key.size()];
@@ -190,8 +189,8 @@ string formatKey(string key, string text, int tableSize)
     cout << "\nKey is too long. Trimming the key...";
     //Trim the key's length
     newKey.resize(textSize);
-  }//If the key does NOT need to be resized 
-  else{ 
+  } //If the key does NOT need to be resized 
+  else {
     return newKey;
   }
   return newKey;
@@ -208,7 +207,7 @@ void fillSmall(char vSmall[][26]) {
 
 }
 
-void fillLarge(char vLarge[][93]){
+void fillLarge(char vLarge[][93]) {
 
   for (int row = 0; row < 93; row++) {
     for (int col = 0; col < 93; col++) {
@@ -220,16 +219,16 @@ void fillLarge(char vLarge[][93]){
 
 }
 
-void outputResults(string orgT, string orgK, string textF, string keyF){
-cout << "\n\nOriginal Text : " << orgT <<
-        "\nOriginal Key  : " << orgK << 
-        "\n\nFormatted Text: " << textF <<
-        "\nFormatted Key : " << keyF << 
-        endl;
+void outputResults(string orgT, string orgK, string textF, string keyF) {
+  cout << "\n\nOriginal Text : " << orgT <<
+    "\nOriginal Key  : " << orgK <<
+    "\n\nFormatted Text: " << textF <<
+    "\nFormatted Key : " << keyF <<
+    endl;
 
 }
 
-void transformSmall(string text, string key, int choice, char vSmall[][26]){
+void transformSmall(string text, string key, int choice, char vSmall[][26]) {
 
   string encryptedText, decryptedText;
   int ASCII_INDEX = 65;
@@ -239,16 +238,16 @@ void transformSmall(string text, string key, int choice, char vSmall[][26]){
     for (int i = 0; i < text.size(); i++) {
       encryptedText += vSmall[text[i] - (char) ASCII_INDEX][key[i] - (char) ASCII_INDEX];
     }
-    
+
     cout << "\nEncrypted Text: " << encryptedText << endl;
 
   } else if (choice == 2) {
 
-    for (int col = 0; col < text.size(); col++) { 
-      for (int row = 0; row < 26; row++) { 
-        if (vSmall[row][key[col] - (char) ASCII_INDEX] == text[col]) { 
-          decryptedText += (char) ASCII_INDEX + row;  
-    
+    for (int col = 0; col < text.size(); col++) {
+      for (int row = 0; row < 26; row++) {
+        if (vSmall[row][key[col] - (char) ASCII_INDEX] == text[col]) {
+          decryptedText += (char) ASCII_INDEX + row;
+
         }
       }
     }
@@ -259,7 +258,7 @@ void transformSmall(string text, string key, int choice, char vSmall[][26]){
 
 }
 
-void transformLarge(string text, string key, int choice, char vLarge[][93]){
+void transformLarge(string text, string key, int choice, char vLarge[][93]) {
 
   string encryptedText, decryptedText;
   int ASCII_INDEX = 33;
@@ -286,4 +285,3 @@ void transformLarge(string text, string key, int choice, char vLarge[][93]){
   }
 
 }
-

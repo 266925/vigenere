@@ -1,18 +1,6 @@
 # Pseudocode
 DECLARE libraries
-
 DECLARE functions to get AND manipulate user data
-    string getText
-    string getKey
-    string formatText
-    string formatKey
-    int getColumns
-    int getTransform
-    void fillSmall
-    void fillLarge
-    void transformSmall
-    void transformLarge
-    void outputResults
 
 ENTER MAIN
 
