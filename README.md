@@ -1,4 +1,4 @@
-# Vigenere Text Encryption & Decryption
+# Vigenere
 
 C++ program to encrypt or decrypt text entered by the user using a custom key and one of (2) Vigenere tables. (26x26 or 93x93).
 
@@ -48,5 +48,4 @@ This project is licensed under the [Apache] License Version 2.0 (the "License");
 
 ## Acknowledgments
 
-Inspiration, code snippets, etc.
 * [awesome-readme](https://github.com/matiassingers/awesome-readme)
