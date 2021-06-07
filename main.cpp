@@ -17,41 +17,37 @@ void transformLarge(string, string, int, char[][93]);
 void outputResults(string, string, string, string);
 
 int main() {
-  //Local variables
   int transformChoice, matrixSize, runAgain;
   string formattedText, formattedKey, originalText, originalKey;
 
-  //Declare sarrays
   char vSmall[26][26];
   char vLarge[93][93];
 
-  //Fill arrays
   fillSmall(vSmall);
   fillLarge(vLarge);
 
   do {
 
-    //Get user information
     matrixSize = getColumns();
     transformChoice = getTransform();
     originalText = getText();
     originalKey = getKey();
 
-    //Format text and key
+   
     formattedText = formatText(originalText, matrixSize);
     formattedKey = formatKey(originalKey, formattedText, matrixSize);
 
-    //Output user input
+   
     outputResults(originalText, originalKey, formattedText, formattedKey);
 
-    //Transform
+   
     if (matrixSize == 26) {
       transformSmall(formattedText, formattedKey, transformChoice, vSmall);
     } else if (matrixSize == 93) {
       transformLarge(formattedText, formattedKey, transformChoice, vLarge);
     }
 
-    //Prompt user to run  again
+    
     std::cout << "\nRun again?\n1. Yes\n2. No\n";
     cin >> runAgain;
   } while (runAgain != 2);
@@ -109,17 +105,17 @@ int getTransform() {
 
 string formatText(string text, int size) {
 
-  //Remove Spaces from TEXT
+
   cout << "\nRemoving spaces from the TEXT...";
   text.erase(std::remove_if(text.begin(), text.end(), ::isspace), text.end());
 
   if (size == 26) {
-    //Force UPPERCASE of TEXT
+    
     cout << "\nForcing uppercase letters in the TEXT...";
     transform(text.begin(), text.end(), text.begin(), ::toupper);
 
     for (int i = 0; i < text.size(); i++) {
-      //Remove characters outside ASCII range (small)
+     
       if (text[i] < (char) 65 || text[i] > (char) 90) {
         cout << "\nInvalid character found in TEXT! Removing [" << text[i] << "]...";
         text.erase(i, 1);
@@ -129,7 +125,7 @@ string formatText(string text, int size) {
 
   } else if (size == 93) {
     for (int i = 0; i < text.size(); i++) {
-      //Remove characters outside ASCII range (large)
+      
       if ((text[i] < (char) 33 || text[i] > (char) 126)) {
         cout << "\nInvalid character found in TEXT! Removing [" << text[i] << "]...";
         text.erase(i, 1);
@@ -151,17 +147,17 @@ string formatKey(string key, string text, int tableSize) {
 
   int textSize = text.size();
 
-  //Remove spaces from key
+  
   cout << "\nRemoving spaces from the KEY...";
   key.erase(std::remove_if(key.begin(), key.end(), ::isspace), key.end());
 
   if (tableSize == 26) {
-    //Force key to uppercase
+    
     cout << "\nForcing uppercase letters in the KEY...";
     transform(key.begin(), key.end(), key.begin(), ::toupper);
 
     for (int i = 0; i < key.size(); i++) {
-      //Remove characters outside ASCII range (small)
+      
       if (key[i] < (char) 65 || key[i] > (char) 90) {
         cout << "\nInvalid character found in KEY! Removing [" << key[i] << "]...";
         key.erase(i, 1);
@@ -175,21 +171,21 @@ string formatKey(string key, string text, int tableSize) {
     }
   }
 
-  //Copy key
+ 
   string newKey = key;
 
-  //If the key is not long enough
+  
   if (newKey.size() < textSize) {
     for (int newKeyIndex = key.size(), oldKeyIndex = 0; newKeyIndex < textSize; newKeyIndex++, oldKeyIndex++) {
-      //Append the key to itself
+      
       newKey += newKey[oldKeyIndex % key.size()];
     }
-    //If the key is too long
+    
   } else if (newKey.size() > textSize) {
     cout << "\nKey is too long. Trimming the key...";
-    //Trim the key's length
+    
     newKey.resize(textSize);
-  } //If the key does NOT need to be resized 
+  } 
   else {
     return newKey;
   }
