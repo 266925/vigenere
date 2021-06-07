@@ -33,21 +33,17 @@ int main() {
     originalText = getText();
     originalKey = getKey();
 
-   
     formattedText = formatText(originalText, matrixSize);
     formattedKey = formatKey(originalKey, formattedText, matrixSize);
 
-   
     outputResults(originalText, originalKey, formattedText, formattedKey);
 
-   
     if (matrixSize == 26) {
       transformSmall(formattedText, formattedKey, transformChoice, vSmall);
     } else if (matrixSize == 93) {
       transformLarge(formattedText, formattedKey, transformChoice, vLarge);
     }
 
-    
     std::cout << "\nRun again?\n1. Yes\n2. No\n";
     cin >> runAgain;
   } while (runAgain != 2);
@@ -105,17 +101,16 @@ int getTransform() {
 
 string formatText(string text, int size) {
 
-
   cout << "\nRemoving spaces from the TEXT...";
   text.erase(std::remove_if(text.begin(), text.end(), ::isspace), text.end());
 
   if (size == 26) {
-    
+
     cout << "\nForcing uppercase letters in the TEXT...";
     transform(text.begin(), text.end(), text.begin(), ::toupper);
 
     for (int i = 0; i < text.size(); i++) {
-     
+
       if (text[i] < (char) 65 || text[i] > (char) 90) {
         cout << "\nInvalid character found in TEXT! Removing [" << text[i] << "]...";
         text.erase(i, 1);
@@ -125,7 +120,7 @@ string formatText(string text, int size) {
 
   } else if (size == 93) {
     for (int i = 0; i < text.size(); i++) {
-      
+
       if ((text[i] < (char) 33 || text[i] > (char) 126)) {
         cout << "\nInvalid character found in TEXT! Removing [" << text[i] << "]...";
         text.erase(i, 1);
@@ -147,17 +142,16 @@ string formatKey(string key, string text, int tableSize) {
 
   int textSize = text.size();
 
-  
   cout << "\nRemoving spaces from the KEY...";
   key.erase(std::remove_if(key.begin(), key.end(), ::isspace), key.end());
 
   if (tableSize == 26) {
-    
+
     cout << "\nForcing uppercase letters in the KEY...";
     transform(key.begin(), key.end(), key.begin(), ::toupper);
 
     for (int i = 0; i < key.size(); i++) {
-      
+
       if (key[i] < (char) 65 || key[i] > (char) 90) {
         cout << "\nInvalid character found in KEY! Removing [" << key[i] << "]...";
         key.erase(i, 1);
@@ -171,22 +165,19 @@ string formatKey(string key, string text, int tableSize) {
     }
   }
 
- 
   string newKey = key;
 
-  
   if (newKey.size() < textSize) {
     for (int newKeyIndex = key.size(), oldKeyIndex = 0; newKeyIndex < textSize; newKeyIndex++, oldKeyIndex++) {
-      
+
       newKey += newKey[oldKeyIndex % key.size()];
     }
-    
+
   } else if (newKey.size() > textSize) {
     cout << "\nKey is too long. Trimming the key...";
-    
+
     newKey.resize(textSize);
-  } 
-  else {
+  } else {
     return newKey;
   }
   return newKey;
