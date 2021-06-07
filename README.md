@@ -2,8 +2,8 @@
 
 C++ program to encrypt or decrypt text entered by the user using a custom key and one of (2) Vigenere tables. (26x26 or 93x93).
 
-## Description
-[PDF Documentation HERE](https://sites.google.com/view/davidfisher/vigenere/pdf-documentation)
+## Description [PDF Documentation](https://sites.google.com/view/davidfisher/vigenere/pdf-documentation)
+
 The Vigenere program receives user text and a key which is used to tranform the text utilizing the standard Vigenere table. The first set of symbols are the uppercase letters from A-Z. (26 characters). The second set of symbols are the printable ASCII characters from 33 to 126. (93 Symbols). After the user inputs selection for Encryption/Decryption, the program then prompts the user for the size of the Vigenere Table used to encrypt the text. (26x26 or 93x93). Then the user is then prompted for the text and key. The program then computes the result and prompts the user to run again.
 
 ## Getting Started
@@ -26,8 +26,8 @@ The program is written in C++ and fully contained in main. Clone and run in any 
 
 ## Authors
 
-Dave F.  
-[GSites E-Portfolio](https://sites.google.com/view/davidfisher/)
+Dave  
+[Google Sites E-Portfolio](https://sites.google.com/view/davidfisher/)
 
 ## Version History
 
