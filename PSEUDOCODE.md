@@ -3,7 +3,6 @@ DECLARE libraries
 DECLARE functions to get AND manipulate user data
 
 ENTER MAIN
-
 DECLARE variables
 
     transformChoice
